@@ -71,4 +71,23 @@ RSpec.describe Relationship, type: :model do
       expect(Relationship.friends_of("totoro@ghibli.com").count).to eq 5
     end
   end
+
+  describe "common friends scope" do
+    let!(:friend1) { create(:relationship, requestor: "totoro@ghibli.com", target: "miyazaki@ghibli.com") }
+    let!(:friend2) { create(:relationship, requestor: "totoro@ghibli.com", target: "takahata@ghibli.com") }
+    let!(:friend3) { create(:relationship, requestor: "totoro@ghibli.com", target: "hisaishi@ghibli.com") }
+    let!(:friend4) { create(:relationship, requestor: "totoro@ghibli.com", target: "suzuki@ghibli.com") }
+    let!(:friend5) { create(:relationship, requestor: "totoro@ghibli.com", target: "yubaba@ghibli.com", friend: false) }
+
+    let!(:friend6) { create(:relationship, requestor: "no-face@ghibli.com", target: "miyazaki@ghibli.com") }
+    let!(:friend7) { create(:relationship, requestor: "no-face@ghibli.com", target: "haku@ghibli.com") }
+    let!(:friend8) { create(:relationship, requestor: "no-face@ghibli.com", target: "hisaishi@ghibli.com") }
+    let!(:friend9) { create(:relationship, requestor: "no-face@ghibli.com", target: "chihiro@ghibli.com") }
+    let!(:friend10) { create(:relationship, requestor: "no-face@ghibli.com", target: "yubaba@ghibli.com") }
+
+    it "fetches common friends only" do
+      expect(Relationship.common_friends_of(["totoro@ghibli.com", "no-face@ghibli.com"]).pluck(:target).count).to eq 2
+      expect(Relationship.common_friends_of(["totoro@ghibli.com", "no-face@ghibli.com"]).pluck(:target)).to match_array ["miyazaki@ghibli.com", "hisaishi@ghibli.com"]
+    end
+  end
 end

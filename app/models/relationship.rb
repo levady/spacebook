@@ -3,6 +3,7 @@ class Relationship < ApplicationRecord
   validate  :cannot_add_self
 
   scope :friends_of, -> (email) { where(requestor: email, friend: true) }
+  scope :common_friends_of, -> (emails) { friends_of(emails).having("COUNT(target) = 2").group(:target) }
 
   def self.create_friendship!(requestor, target)
     transaction do
