@@ -165,4 +165,20 @@ RSpec.describe Relationship, type: :model do
       end
     end
   end
+
+  describe "update recipients scope" do
+    let!(:friend1) { create(:relationship, target: "totoro@ghibli.com", requestor: "miyazaki@ghibli.com", friend: true) }
+    let!(:friend2) { create(:relationship, target: "totoro@ghibli.com", requestor: "takahata@ghibli.com", following: true) }
+    let!(:friend3) { create(:relationship, target: "totoro@ghibli.com", requestor: "hisaishi@ghibli.com", block: true) }
+    let!(:friend4) { create(:relationship, target: "totoro@ghibli.com", requestor: "suzuki@ghibli.com", following: false, friend: false) }
+    let!(:friend5) { create(:relationship, target: "totoro@ghibli.com", requestor: "yubaba@ghibli.com", friend: true, following: false, block: true) }
+    let!(:friend6) { create(:relationship, target: "totoro@ghibli.com", requestor: "zeniba@ghibli.com", friend: true) }
+    let!(:friend7) { create(:relationship, target: "totoro@ghibli.com", requestor: "kamaji@ghibli.com", friend: true) }
+
+    it "fetches recipients" do
+      expect(Relationship.update_recipients_for("totoro@ghibli.com").pluck(:requestor).count).to eq 4
+      recipients = ["miyazaki@ghibli.com", "takahata@ghibli.com", "zeniba@ghibli.com", "kamaji@ghibli.com"]
+      expect(Relationship.update_recipients_for(["totoro@ghibli.com", "no-face@ghibli.com"]).pluck(:requestor)).to match_array recipients
+    end
+  end
 end

@@ -6,6 +6,14 @@ class Relationship < ApplicationRecord
   scope :friends_of, -> (email) { where(requestor: email, friend: true) }
   scope :common_friends_of, -> (emails) { friends_of(emails).having("COUNT(target) = 2").group(:target) }
 
+  scope :friends_with, -> (email) { where(target: email, friend: true) }
+  scope :followers_of, -> (email) { where(target: email, following: true) }
+  scope :not_blocked,  -> (email) { where(target: email, block: false) }
+
+  scope :update_recipients_for, -> (email) {
+    friends_with(email).or(followers_of(email)).not_blocked(email)
+  }
+
   def self.create_friendship!(requestor, target)
     transaction do
       add_friend!(requestor, target)
