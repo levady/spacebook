@@ -5,6 +5,12 @@ RSpec.describe Relationship, type: :model do
     it { should validate_presence_of(:requestor) }
     it { should validate_presence_of(:target) }
 
+    it "cannot add self as friend" do
+      relationship = build(:relationship, requestor: "req@email.com", target: "req@email.com")
+      expect(relationship).not_to be_valid
+      expect(relationship.errors.messages[:target]).to eq ["cannot add self as friend"]
+    end
+
     context "uniqueness" do
       it "raise an error when the combination of requestor and target is not unique" do
         create(:relationship, requestor: "req@email.com", target: "target@email.com")
