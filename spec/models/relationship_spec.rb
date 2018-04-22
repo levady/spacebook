@@ -66,6 +66,14 @@ RSpec.describe Relationship, type: :model do
         expect(Relationship.count).to eq(0)
       end
     end
+
+    context "when there's a following relationship for requestor" do
+      let!(:following) { create(:relationship, requestor: "papaya@email.com", target: "melon@email.com", following: true, friend: false) }
+      it "update friend to true" do
+        Relationship.create_friendship!("papaya@email.com", "melon@email.com")
+        expect(following.reload.friend).to eq true
+      end
+    end
   end
 
   describe "friends scope" do

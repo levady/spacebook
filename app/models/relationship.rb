@@ -7,8 +7,8 @@ class Relationship < ApplicationRecord
 
   def self.create_friendship!(requestor, target)
     transaction do
-      create!(requestor: requestor, target: target, friend: true, following: true)
-      create!(requestor: target, target: requestor, friend: true, following: true)
+      add_friend!(requestor, target)
+      add_friend!(target, requestor)
     end
   end
 
@@ -28,6 +28,14 @@ class Relationship < ApplicationRecord
   end
 
 private
+
+  def self.add_friend!(requestor, target)
+    relationship = find_or_initialize_by(requestor: requestor, target: target)
+    relationship.friend = true
+    relationship.following = true
+    relationship.save!
+    relationship
+  end
 
   def cannot_add_self
     if requestor == target
