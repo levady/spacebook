@@ -16,7 +16,16 @@ class RelationshipsController < ApplicationController
     render json: { success: true, friends: friends, count: friends.count }
   end
 
+  def follow
+    Relationship.follow!(relationship_params[:requestor], relationship_params[:target])
+    render json: { success: true }
+  end
+
 private
+
+  def relationship_params
+    params.permit(:requestor, :target)
+  end
 
   def validate_params
     case params[:action].to_sym
