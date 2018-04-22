@@ -1,5 +1,5 @@
 class Relationship < ApplicationRecord
-  validates :requestor, :target, presence: true, 'valid_email_2/email': true
+  validates :requestor, :target, presence: true, 'valid_email_2/email': { message: "email must be valid" }
   validate  :cannot_add_self
 
   scope :friends_of, -> (email) { where(requestor: email, friend: true) }
