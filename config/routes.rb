@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   root to: "application#root"
 
   post :relationships, to: 'relationships#create'
+  post :friends, to: 'relationships#index'
 end
