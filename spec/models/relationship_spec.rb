@@ -130,10 +130,11 @@ RSpec.describe Relationship, type: :model do
 
   describe ".block" do
     context "given valid params" do
-      it "creates a relationship with block true and following false" do
+      it "creates a relationship with block true, following false and friend false" do
         relationship = Relationship.block!("9S@nier.com", "2B@nier.com")
         expect(relationship.block).to eq true
         expect(relationship.following).to eq false
+        expect(relationship.friend).to eq false
       end
 
       it "update when there's already an existing relationship" do
@@ -142,6 +143,7 @@ RSpec.describe Relationship, type: :model do
         expect(blocking.id).to eq relationship.id
         expect(relationship.reload.block).to eq true
         expect(relationship.following).to eq false
+        expect(relationship.friend).to eq true
       end
     end
 

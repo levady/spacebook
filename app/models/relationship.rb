@@ -23,6 +23,7 @@ class Relationship < ApplicationRecord
     relationship = find_or_initialize_by(requestor: requestor, target: target)
     relationship.block = true
     relationship.following = false
+    relationship.friend = false if relationship.new_record?
     relationship.save!
     relationship
   end
