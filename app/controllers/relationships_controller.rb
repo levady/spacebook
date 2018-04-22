@@ -26,10 +26,20 @@ class RelationshipsController < ApplicationController
     render json: { success: true }
   end
 
+  def recipients
+    fetcher = UpdateRecipientsFetcher.new(relationship_params[:sender], relationship_params[:text])
+    if fetcher.valid?
+      recipients = fetcher.run
+      render json: { success: true, recipients: recipients, count: recipients.count }
+    else
+      render_error(fetcher)
+    end
+  end
+
 private
 
   def relationship_params
-    params.permit(:requestor, :target)
+    params.permit(:requestor, :target, :sender, :text)
   end
 
   def validate_params

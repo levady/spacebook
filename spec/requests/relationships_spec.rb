@@ -140,4 +140,35 @@ RSpec.describe 'Relationships API', type: :request do
       end
     end
   end
+
+  describe "POST /recipients" do
+    let(:string) { "I'm so tired sp@email.com" }
+
+    context "when the request is valid" do
+      let!(:friends) do
+        create_list(:relationship, 5, target: "johnny-danger@booyah.com")
+      end
+
+      it "returns a list of recipients" do
+        post '/recipients', params: { sender: "johnny-danger@booyah.com", text: string }
+        expect(json["success"]).to eq true
+        expect(json["count"]).to eq 6
+      end
+    end
+
+    context "when the request is invalid" do
+      it "returns a proper error response" do
+        # Invalid params
+        post '/recipients', params: { sender: nil, text: string }
+        expect(json["success"]).to eq false
+        expect(json.dig("errors", "sender")).to eq ["can't be blank"]
+
+        # Invalid sender and text
+        post '/recipients', params: { sender: "asdasd", text: nil }
+        expect(json["success"]).to eq false
+        expect(json.dig("errors", "sender")).to eq ["email must be valid"]
+        expect(json.dig("errors", "text")).to eq ["can't be blank"]
+      end
+    end
+  end
 end
