@@ -110,6 +110,7 @@ RSpec.describe Relationship, type: :model do
       it "creates a relationship with following true" do
         relationship = Relationship.follow!("9S@nier.com", "2B@nier.com")
         expect(relationship.following).to eq true
+        expect(relationship.friend).to eq false
       end
 
       it "update when there's already an existing relationship" do
@@ -117,6 +118,7 @@ RSpec.describe Relationship, type: :model do
         following = Relationship.follow!("9S@nier.com", "2B@nier.com")
         expect(following.id).to eq relationship.id
         expect(relationship.reload.following).to eq true
+        expect(relationship.reload.friend).to eq true
       end
     end
 

@@ -102,7 +102,7 @@ RSpec.describe 'Relationships API', type: :request do
         expect(Relationship.count).to eq(1)
         requestor = Relationship.find_by(requestor: "johnny-danger@booyah.com", target: "triggered@email.com")
         expect(requestor).not_to be_nil
-        expect(requestor.friend).to eq true
+        expect(requestor.friend).to eq false
         expect(requestor.following).to eq true
       end
     end

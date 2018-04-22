@@ -15,6 +15,7 @@ class Relationship < ApplicationRecord
   def self.follow!(requestor, target)
     relationship = find_or_initialize_by(requestor: requestor, target: target)
     relationship.following = true
+    relationship.friend = false if relationship.new_record?
     relationship.save!
     relationship
   end
