@@ -21,6 +21,11 @@ class RelationshipsController < ApplicationController
     render json: { success: true }
   end
 
+  def block
+    Relationship.block!(relationship_params[:requestor], relationship_params[:target])
+    render json: { success: true }
+  end
+
 private
 
   def relationship_params

@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   post :friends, to: 'relationships#index'
   post :common_friends, to: 'relationships#common_friends'
   post :follow, to: 'relationships#follow'
+  post :block, to: 'relationships#block'
 end

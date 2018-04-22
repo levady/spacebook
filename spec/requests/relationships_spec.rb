@@ -116,4 +116,28 @@ RSpec.describe 'Relationships API', type: :request do
       end
     end
   end
+
+  describe "POST /block" do
+    context "when the request is valid" do
+      it "creates a blocking relationship for the requestor" do
+        post '/block', params: { requestor: "johnny-danger@booyah.com", target: "triggered@email.com" }
+        expect(json["success"]).to eq true
+        expect(Relationship.count).to eq(1)
+        requestor = Relationship.find_by(requestor: "johnny-danger@booyah.com", target: "triggered@email.com")
+        expect(requestor).not_to be_nil
+        expect(requestor.friend).to eq false
+        expect(requestor.following).to eq false
+        expect(requestor.block).to eq true
+      end
+    end
+
+    context "when the request is invalid" do
+      it "returns a proper error response" do
+        post '/follow', params: { requestor: "johnny-danger@booyah.com", target: "triggered@email" }
+        expect(json["success"]).to eq false
+        expect(Relationship.count).to eq(0)
+        expect(json.dig("errors", "target")).to eq ["email must be valid"]
+      end
+    end
+  end
 end
