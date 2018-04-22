@@ -16,5 +16,19 @@ RSpec.describe Relationship, type: :model do
         ).to eq("target@email.com")
       end
     end
+
+    context "requestor" do
+      it "does not allow invalid email format" do
+        expect(build(:relationship, requestor: "foobar@email.com")).to be_valid
+        expect(build(:relationship, requestor: "foobar")).not_to be_valid
+      end
+    end
+
+    context "target" do
+      it "does not allow invalid email format" do
+        expect(build(:relationship, requestor: "foobar@email.com")).to be_valid
+        expect(build(:relationship, requestor: "foobar")).not_to be_valid
+      end
+    end
   end
 end
