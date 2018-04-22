@@ -7,8 +7,8 @@ class Relationship < ApplicationRecord
 
   def self.create_friendship!(requestor, target)
     transaction do
-      create!(requestor: requestor, target: target, friend: true)
-      create!(requestor: target, target: requestor, friend: true)
+      create!(requestor: requestor, target: target, friend: true, following: true)
+      create!(requestor: target, target: requestor, friend: true, following: true)
     end
   end
 

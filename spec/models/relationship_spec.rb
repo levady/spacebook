@@ -44,12 +44,18 @@ RSpec.describe Relationship, type: :model do
       it "create relationship for both the requestor and the target" do
         Relationship.create_friendship!(*friends)
         expect(Relationship.count).to eq(2)
-        expect(
-          Relationship.find_by(requestor: "melon@email.com", target: "papaya@email.com", friend: true)
-        ).not_to be_nil
-        expect(
-          Relationship.find_by(requestor: "papaya@email.com", target: "melon@email.com", friend: true)
-        ).not_to be_nil
+
+        # Requestor
+        requestor = Relationship.find_by(requestor: "melon@email.com", target: "papaya@email.com")
+        expect(requestor).not_to be_nil
+        expect(requestor.friend).to eq true
+        expect(requestor.following).to eq true
+
+        # Target
+        target = Relationship.find_by(requestor: "papaya@email.com", target: "melon@email.com")
+        expect(target).not_to be_nil
+        expect(target.friend).to eq true
+        expect(target.following).to eq true
       end
     end
 
