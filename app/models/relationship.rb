@@ -1,6 +1,7 @@
 class Relationship < ApplicationRecord
   validates :requestor, :target, presence: true, 'valid_email_2/email': { message: "email must be valid" }
   validate  :cannot_add_self
+  validate  :target_blocked?, on: :update, if: :friend_changed?
 
   scope :friends_of, -> (email) { where(requestor: email, friend: true) }
   scope :common_friends_of, -> (emails) { friends_of(emails).having("COUNT(target) = 2").group(:target) }
@@ -42,6 +43,12 @@ private
   def cannot_add_self
     if requestor == target
       errors.add(:target, "cannot add self as friend")
+    end
+  end
+
+  def target_blocked?
+    if friend? && block?
+      errors.add(:target, "blocked, cannot create new friend connection")
     end
   end
 end

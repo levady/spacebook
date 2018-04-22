@@ -74,6 +74,15 @@ RSpec.describe Relationship, type: :model do
         expect(following.reload.friend).to eq true
       end
     end
+
+    context "when target is blocked" do
+      let!(:following) { create(:relationship, requestor: "papaya@email.com", target: "melon@email.com", following: false, friend: false, block: true) }
+      it "raise an error" do
+        expect {
+          Relationship.create_friendship!("papaya@email.com", "melon@email.com")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe "friends scope" do
