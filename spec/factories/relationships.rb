@@ -5,5 +5,6 @@ FactoryBot.define do
     target    { Faker::Internet.unique.email }
     friend true
     following true
+    block false
   end
 end

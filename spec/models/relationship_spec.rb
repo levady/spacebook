@@ -119,4 +119,29 @@ RSpec.describe Relationship, type: :model do
       end
     end
   end
+
+  describe ".block" do
+    context "given valid params" do
+      it "creates a relationship with block true and following false" do
+        relationship = Relationship.block!("9S@nier.com", "2B@nier.com")
+        expect(relationship.block).to eq true
+        expect(relationship.following).to eq false
+      end
+
+      it "update when there's already an existing relationship" do
+        relationship = create(:relationship, requestor: "9S@nier.com", target: "2B@nier.com", following: false)
+        blocking = Relationship.block!("9S@nier.com", "2B@nier.com")
+        expect(blocking.id).to eq relationship.id
+        expect(relationship.reload.block).to eq true
+        expect(relationship.following).to eq false
+      end
+    end
+
+    context "given invalid params" do
+      it "raise an error" do
+        expect { Relationship.block!("email", nil) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect(Relationship.count).to eq(0)
+      end
+    end
+  end
 end
