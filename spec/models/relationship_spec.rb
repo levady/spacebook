@@ -37,4 +37,28 @@ RSpec.describe Relationship, type: :model do
       end
     end
   end
+
+  describe ".create_friendship!" do
+    context "given valid param" do
+      let(:friends) { ["melon@email.com", "papaya@email.com"] }
+      it "create relationship for both the requestor and the target" do
+        Relationship.create_friendship!(*friends)
+        expect(Relationship.count).to eq(2)
+        expect(
+          Relationship.find_by(requestor: "melon@email.com", target: "papaya@email.com", friend: true)
+        ).not_to be_nil
+        expect(
+          Relationship.find_by(requestor: "papaya@email.com", target: "melon@email.com", friend: true)
+        ).not_to be_nil
+      end
+    end
+
+    context "given invalid param" do
+      let(:friends) { ["melon@email.com", nil] }
+      it "raise an error" do
+        expect { Relationship.create_friendship!(*friends) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect(Relationship.count).to eq(0)
+      end
+    end
+  end
 end

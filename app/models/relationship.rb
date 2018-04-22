@@ -2,6 +2,13 @@ class Relationship < ApplicationRecord
   validates :requestor, :target, presence: true, 'valid_email_2/email': true
   validate  :cannot_add_self
 
+  def self.create_friendship!(requestor, target)
+    transaction do
+      create!(requestor: requestor, target: target, friend: true)
+      create!(requestor: target, target: requestor, friend: true)
+    end
+  end
+
 private
 
   def cannot_add_self
