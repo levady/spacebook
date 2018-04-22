@@ -153,6 +153,9 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    valid_email2 (2.2.3)
+      activemodel (>= 3.2)
+      mail (~> 2.5)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -175,6 +178,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
+  valid_email2
 
 RUBY VERSION
    ruby 2.5.1p57
