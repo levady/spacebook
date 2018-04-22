@@ -12,6 +12,13 @@ class Relationship < ApplicationRecord
     end
   end
 
+  def self.follow!(requestor, target)
+    relationship = find_or_initialize_by(requestor: requestor, target: target)
+    relationship.following = true
+    relationship.save!
+    relationship
+  end
+
 private
 
   def cannot_add_self

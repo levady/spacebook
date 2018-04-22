@@ -90,4 +90,27 @@ RSpec.describe Relationship, type: :model do
       expect(Relationship.common_friends_of(["totoro@ghibli.com", "no-face@ghibli.com"]).pluck(:target)).to match_array ["miyazaki@ghibli.com", "hisaishi@ghibli.com"]
     end
   end
+
+  describe ".follow" do
+    context "given valid params" do
+      it "creates a relationship with following true" do
+        relationship = Relationship.follow!("9S@nier.com", "2B@nier.com")
+        expect(relationship.following).to eq true
+      end
+
+      it "update when there's already an existing relationship" do
+        relationship = create(:relationship, requestor: "9S@nier.com", target: "2B@nier.com", following: false)
+        following = Relationship.follow!("9S@nier.com", "2B@nier.com")
+        expect(following.id).to eq relationship.id
+        expect(relationship.reload.following).to eq true
+      end
+    end
+
+    context "given invalid params" do
+      it "raise an error" do
+        expect { Relationship.follow!("email", nil) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect(Relationship.count).to eq(0)
+      end
+    end
+  end
 end
