@@ -15,7 +15,7 @@ class UpdateRecipientsFetcher
   def run
     @recipients = Relationship.update_recipients_for(sender).pluck(:requestor)
     @recipients.push(*email_extractor.extract(text))
-    @recipients
+    @recipients.uniq
   end
 
 private

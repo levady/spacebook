@@ -14,7 +14,7 @@ RSpec.describe UpdateRecipientsFetcher, type: :model do
   end
 
   describe "#run" do
-    subject { described_class.new("totoro@ghibli.com", "test with email a@b.com").run }
+    subject { described_class.new("totoro@ghibli.com", "test with email a@b.com and zeniba@ghibli.com").run }
     let!(:friend1) { create(:relationship, target: "totoro@ghibli.com", requestor: "miyazaki@ghibli.com", friend: true) }
     let!(:friend2) { create(:relationship, target: "totoro@ghibli.com", requestor: "takahata@ghibli.com", following: true) }
     let!(:friend3) { create(:relationship, target: "totoro@ghibli.com", requestor: "hisaishi@ghibli.com", block: true) }
