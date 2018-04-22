@@ -61,4 +61,14 @@ RSpec.describe Relationship, type: :model do
       end
     end
   end
+
+  describe "friends scope" do
+    let!(:friends) { create_list(:relationship, 5, requestor: "totoro@ghibli.com") }
+    let!(:non_friends) { create_list(:relationship, 2, requestor: "totoro@ghibli.com", friend: false) }
+    let!(:others) { create_list(:relationship, 2, requestor: "no-face@ghibli.com") }
+
+    it "fetches friends only" do
+      expect(Relationship.friends_of("totoro@ghibli.com").count).to eq 5
+    end
+  end
 end
