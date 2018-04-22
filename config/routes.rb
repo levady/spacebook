@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 
   post :relationships, to: 'relationships#create'
   post :friends, to: 'relationships#index'
+  post :common_friends, to: 'relationships#common_friends'
 end

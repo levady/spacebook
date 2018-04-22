@@ -10,11 +10,17 @@ class RelationshipsController < ApplicationController
     render json: { success: true }
   end
 
+  def common_friends
+    # TODO: Paginate the results.
+    friends = Relationship.common_friends_of(@friends_param.friends).pluck(:target)
+    render json: { success: true, friends: friends, count: friends.count }
+  end
+
 private
 
   def validate_params
     case params[:action].to_sym
-    when :create
+    when :create, :common_friends
       run_friends_param_validator
     when :index
       run_email_param_validator
