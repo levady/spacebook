@@ -16,8 +16,8 @@ protected
 
   def validate_params; end
 
-  def render_error(object)
+  def render_error(object, status: nil)
     errors = object.is_a?(StandardError) ? object.record.errors : object.errors
-    render json: { success: false, errors: errors }
+    render json: { success: false, errors: errors }, status: status || :unprocessable_entity
   end
 end

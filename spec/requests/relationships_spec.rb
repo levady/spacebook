@@ -21,11 +21,13 @@ RSpec.describe 'Relationships API', type: :request do
         # Invalid params
         post '/relationships', params: { friends: ["johnny-danger@booyah.com"] }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "friends")).to eq ["must provide 2 emails"]
 
         # Invalid emails
         post '/relationships', params: { friends: ["johnny-danger@booyah", "asdasd"] }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "friends")).to eq ["emails must be valid"]
       end
     end
@@ -53,11 +55,13 @@ RSpec.describe 'Relationships API', type: :request do
         # Invalid params
         post '/friends', params: { email: nil }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "email")).to eq ["can't be blank"]
 
         # Invalid emails
         post '/friends', params: { email: "asdasd" }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "email")).to eq ["email must be valid"]
       end
     end
@@ -84,11 +88,13 @@ RSpec.describe 'Relationships API', type: :request do
         # Invalid params
         post '/common_friends', params: { friends: ["hades@gow.com"] }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "friends")).to eq ["must provide 2 emails"]
 
         # Invalid emails
         post '/common_friends', params: { friends: ["icarus@gow", "asdasd"] }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "friends")).to eq ["emails must be valid"]
       end
     end
@@ -111,6 +117,7 @@ RSpec.describe 'Relationships API', type: :request do
       it "returns a proper error response" do
         post '/follow', params: { requestor: "johnny-danger@booyah.com", target: "triggered@email" }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(Relationship.count).to eq(0)
         expect(json.dig("errors", "target")).to eq ["email must be valid"]
       end
@@ -135,6 +142,7 @@ RSpec.describe 'Relationships API', type: :request do
       it "returns a proper error response" do
         post '/follow', params: { requestor: "johnny-danger@booyah.com", target: "triggered@email" }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(Relationship.count).to eq(0)
         expect(json.dig("errors", "target")).to eq ["email must be valid"]
       end
@@ -161,11 +169,13 @@ RSpec.describe 'Relationships API', type: :request do
         # Invalid params
         post '/recipients', params: { sender: nil, text: string }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "sender")).to eq ["can't be blank"]
 
         # Invalid sender and text
         post '/recipients', params: { sender: "asdasd", text: nil }
         expect(json["success"]).to eq false
+        expect(response.status).to eq 422
         expect(json.dig("errors", "sender")).to eq ["email must be valid"]
         expect(json.dig("errors", "text")).to eq ["can't be blank"]
       end
